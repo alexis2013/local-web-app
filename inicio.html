@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+  </head>
+  
+  <body onload='iniciar()'>
+
+    <div id="modalCambio" class="modal modal-fixed-footer">
+      <div class="modal-content">
+        <div class="section">
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="descripcionCambio" type="text">
+              <label for="descripcionCambio">Descripcion Cambio</label>
+            </div>
+            <div class="input-field col s12">
+              <button class="btn waves-effect waves-light" name="action" id="agregarCambio">Guardar
+                <i class="material-icons right">save</i>
+              </button>
+            </div>
+          </div> <!-- row -->
+        </div> <!-- section -->
+      </div> <!-- modal content -->
+    </div> <!-- modal -->
+
+    <div id="modalSeguimiento" class="modal modal-fixed-footer">
+      <div class="modal-content">
+          <div class="container">
+            <div class="row col s12">
+              <ul class="collapsible popout" id="informacionCliente">
+
+                <li>
+                  <div class="collapsible-header">Informacion Cliente
+                  </div>
+                  <div class="collapsible-body">
+
+                    <div class="row">
+                      <div class="input-field col s12 l3">
+                        <input disabled id="idClienteModal" type="number">
+                        <label for="idClienteModal">ID Cliente</label>
+                      </div>
+                      <div class="input-field col s12 l9">
+                        <input id="emailModal" type="email">
+                        <label for="emailModal">Email</label>
+                      </div>
+                    </div> <!-- row -->
+
+                    <div class="row">
+                      <div class="input-field col s12 l6">
+                        <input id="precioModal" type="number">
+                        <label for="precioModal">Precio</label>
+                      </div>
+                      <div class="input-field col s12 l6">
+                        <input disabled id="restanteModal" type="number">
+                        <label for="restanteModal">Costo Restante</label>
+                      </div>
+                    </div> <!-- row -->
+
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <select id="estadoModal">
+                          <option value="En Proceso">En Proceso</option>
+                          <option value="Cancelado">Cancelado</option>
+                          <option value="Pausado">Pausado</option>
+                          <option value="Finalizado">Finalizado</option>
+                        </select>
+                        <label>Estado</label>
+                      </div>
+                    </div> <!-- row -->
+
+
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="cambioInfoCliente">Guardar
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header">Prueba Molde
+                  </div>
+                  <div class="collapsible-body">
+
+                    <div class="row">
+                      <div class="input-field col s12 l6">                  
+                        <input id="fechaMoldeModal" type="text" class="datepicker">
+                        <label for="fechaMoldeModal"> Fecha Prueba Molde </label>
+                      </div>
+                      <div class="input-field col s12 l6">                  
+                        <input type="text" class="timepicker" id="horaPruebaMoldeModal">
+                        <label for="horaPruebaMoldeModal"> Hora Prueba Molde </label>
+                      </div>
+                    </div> 
+
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="cambioPruebaMolde">Guardar
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header">Primer Prueba
+                  </div>
+                  <div class="collapsible-body">
+                    
+                    <div class="row">
+                      <div class="input-field col s12 l6">                  
+                        <input id="fechaPrimerPruebaModal" type="text" class="datepicker">
+                        <label for="fechaPrimerPruebaModal"> Fecha Primer Prueba</label>
+                      </div>
+                      <div class="input-field col s12 l6">                  
+                        <input type="text" class="timepicker" id="horaPrimerPruebaModal">
+                        <label for="horaPrimerPruebaModal"> Hora Primer Prueba</label>
+                      </div>
+                    </div> 
+
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="cambioPrimerPrueba">Guardar
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header">Segunda Prueba
+                  </div>
+                  <div class="collapsible-body">
+
+                    <div class="row">
+                      <div class="input-field col s12 l6">                  
+                        <input id="fechaSegundaPruebaModal" type="text" class="datepicker">
+                        <label for="fechaSegundaPruebaModal"> Fecha Segunda Prueba</label>
+                      </div>
+                      <div class="input-field col s12 l6">                  
+                        <input type="text" class="timepicker" id="horaSegundaPruebaModal">
+                        <label for="horaSegundaPruebaModal"> Hora Segunda Prueba </label>
+                      </div>
+                    </div> 
+
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="cambioSegundaPrueba">Guardar
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header">Entrega
+                  </div>
+                  <div class="collapsible-body">
+
+                    <div class="row">
+                      <div class="input-field col s12 l6">                  
+                        <input id="fechaEntregaModal" type="text" class="datepicker">
+                        <label for="fechaEntregaModal"> Fecha Entrega</label>
+                      </div>
+                      <div class="input-field col s12 l6">                  
+                        <input type="text" class="timepicker" id="horaEntregaModal">
+                        <label for="horaEntregaModal"> Hora Entrega </label>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="cambioEntrega">Guardar
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header">Fiesta
+                  </div>
+                  <div class="collapsible-body">
+
+                    <div class="row">
+                      <div class="input-field col s12 ">                  
+                        <input id="fechaFiestaModal" type="text" class="datepicker">
+                        <label for="fechaFiestaModal"> Fecha Fiesta </label>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="cambioFechaFiesta">Guardar
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header">Seguimientos
+                  </div>
+                  <div class="collapsible-body">
+                    <table class="highlight" id="tableSeguimiento">
+                      <thead>
+                        <tr>
+                          <th>Fecha</th>
+                          <th>Descripcion</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tableBodySeguimiento">
+                      </tbody>
+                    </table>
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header"> Agregar Seguimiento
+                  </div>
+                  <div class="collapsible-body">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="seguimiento" type="text">
+                        <label for="seguimiento">Seguimiento</label>
+                      </div>
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="agregarSeguimiento">Agregar Seguimiento
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li> <!-- item collapsible -->
+
+                <li>
+                  <div class="collapsible-header"> Agregar Pago
+                  </div>
+                  <div class="collapsible-body">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="pago" type="number">
+                        <label for="pago">Pago</label>
+                      </div>
+                      <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" name="action" id="agregarPago">Agregar Pago
+                          <i class="material-icons right">save</i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li> <!-- item collapsible -->
+                
+              </ul> 
+            </div> <!-- row -->
+
+          </div> <!-- container -->
+      </div> <!-- modal content -->
+    </div> <!-- modal -->
+
+
+    <input type="checkbox" id="true" checked/>
+    <div class="container center-align">
+      <div class="row">
+        <div class="col s12">
+          <ul class="collapsible popout" id="collapsiblePedidos">
+            <li>
+              <div class="collapsible-header">Cita
+              </div>
+              <div class="collapsible-body">
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="nombreClienteCita" type="text" class="validate" > 
+                    <label for="nombreClienteCita">Nombre Cliente</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="emailClienteCita" type="email" class="validate" value="vestidos15belem@gmail.com"> 
+                    <label for="emailClienteCita">Email Cliente</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s6">                  
+                    <input id="fechaCita" type="text" class="datepicker">
+                    <label for="fechaCita"> Fecha Cita </label>
+                  </div>
+                  <div class="input-field col s6">                  
+                    <input id="horaCita" type="text" class="timepicker">
+                    <label for="horaCita"> Hora Cita</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row center-align">
+                  <button class="btn waves-effect waves-light" name="action" id="agregarCita">Guardar Cita
+                    <i class="material-icons right">save</i>
+                  </button>
+                </div> <!-- row -->
+              </div>
+            </li> <!-- item collapsible -->
+            <li>
+              <div class="collapsible-header">Nuevo Pedido
+              </div>
+              <div class="collapsible-body">
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="idPedido" type="number"><!-- value="525"> -->
+                    <label for="idPedido">ID Pedido</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="emailCliente" type="email" class="validate"><!-- value="alexisalbanese2017@gmail.com"> -->
+                    <label for="emailCliente">Email Cliente</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12 l2">
+                    <label>
+                      <input type="checkbox" id="tienePruebaMolde" onclick="cambiarEstadoFechaMolde();"/>
+                      <span>Prueba Molde</span>
+                    </label>
+                  </div>
+                  <div class="input-field col s6 l5">                  
+                    <input disabled id="fechaMolde" type="text" class="datepicker">
+                    <label for="fechaMolde"> Fecha Prueba Molde </label>
+                  </div>
+                  <div class="input-field col s6 l5">                  
+                    <input disabled type="text" class="timepicker" id="horaPruebaMolde">
+                    <label for="horaPruebaMolde"> Hora Prueba Molde </label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12 l2">
+                    <label>
+                      <input type="checkbox" id="tiene1erPrueba" onclick="cambiarEstadoFecha1erPrueba();"/>
+                      <span>1er Prueba</span>
+                    </label>
+                  </div>
+                  <div class="input-field col s6 l5">                  
+                    <input disabled id="fecha1erPrueba" type="text" class="datepicker">
+                    <label for="fecha1erPrueba"> Fecha 1er Prueba </label>
+                  </div>
+                  <div class="input-field col s6 l5">                  
+                    <input disabled type="text" class="timepicker" id="hora1erPrueba">
+                    <label for="hora1erPrueba"> Hora 1er Prueba </label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12 l2">
+                    <label>
+                      <input type="checkbox" id="tiene2daPrueba" onclick="cambiarEstadoFecha2daPrueba();"/>
+                      <span>2da Prueba</span>
+                    </label>
+                  </div>
+                  <div class="input-field col s6 l5">                  
+                    <input disabled id="fecha2daPrueba" type="text" class="datepicker">
+                    <label for="fecha2daPrueba"> Fecha 2da Prueba </label>
+                  </div>
+                  <div class="input-field col s6 l5">                  
+                    <input disabled type="text" class="timepicker" id="hora2daPrueba">
+                    <label for="hora2daPrueba"> Hora 2da Prueba </label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s6">                  
+                    <input id="fechaEntrega" type="text" class="datepicker">
+                    <label for="fechaEntrega"> Fecha Entrega </label>
+                  </div>
+                  <div class="input-field col s6">                  
+                    <input id="horaEntrega" type="text" class="timepicker">
+                    <label for="horaEntrega"> Hora Entrega</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12">                  
+                    <input id="fechaFiesta" type="text" class="datepicker">
+                    <label for="fechaFiesta"> Fecha Fiesta </label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row">
+                  <div class="input-field col s12 l6">
+                    <input id="precio" type="number" class="validate" value="150">
+                    <label for="precio">Precio</label>
+                  </div>
+                  <div class="input-field col s12 l6">
+                    <input id="seña" type="number" class="validate" value="10">
+                    <label for="seña">Seña</label>
+                  </div>
+                </div> <!-- row -->
+
+                <div class="row center-align">
+                  <button class="btn waves-effect waves-light" name="action" id="agregarPedido">Guardar Pedido
+                    <i class="material-icons right">save</i>
+                  </button>
+                </div> <!-- row -->
+              </div>
+            </li> <!-- item collapsible -->
+            <li>
+              <div class="collapsible-header">Lista Pedidos
+              </div>
+              <div class="collapsible-body">
+                <div class="row">
+                  <table class="highlight" id="tablePedidos">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Fecha Entrega</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableBodyPedidos">
+                    </tbody>
+                  </table>
+                </div><!-- row -->
+              </div>
+            </li> <!-- item collapsible --> 
+
+          </ul> 
+        </div> <!-- row -->
+
+
+
+
+    </div> <!-- container -->
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <?!= include("inicio-js"); ?>
+  </body>
+</html>

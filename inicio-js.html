@@ -1,0 +1,406 @@
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.datepicker');
+    var elemsTime = document.querySelectorAll('.timepicker');
+    var instances = M.Datepicker.init(elems, { container: 'body' });
+    var instances = M.Timepicker.init(elemsTime, { container: 'body' });
+  });
+
+  M.AutoInit();
+
+  document.getElementById("agregarPedido").addEventListener("click", guardarPedido, false);
+  document.getElementById("agregarCita").addEventListener("click", guardarCita, false);
+
+  document.getElementById("cambioPruebaMolde").addEventListener("click", cambioPruebaMolde, false);
+  document.getElementById("cambioPrimerPrueba").addEventListener("click", cambioPrimerPrueba, false);
+  document.getElementById("cambioSegundaPrueba").addEventListener("click", cambioSegundaPrueba, false);
+  document.getElementById("cambioEntrega").addEventListener("click", cambioEntrega, false);
+  document.getElementById("cambioFechaFiesta").addEventListener("click", cambioFechaFiesta, false);
+  document.getElementById("agregarSeguimiento").addEventListener("click", agregarSeguimiento, false);
+  document.getElementById("cambioInfoCliente").addEventListener("click", activarDescripcionCambio, false);
+  document.getElementById("agregarCambio").addEventListener("click", cambioDatosCliente, false);
+  document.getElementById("agregarPago").addEventListener("click", agregarPago, false);
+  
+  function activarDescripcionCambio(){
+    M.Modal.getInstance(document.getElementById("modalCambio")).open();
+  }
+
+  var tieneFechas = {};
+  tieneFechas.pruebaMolde = document.getElementById("tienePruebaMolde");
+  tieneFechas.primerPrueba = document.getElementById("tiene1erPrueba");
+  tieneFechas.segundaPrueba = document.getElementById("tiene2daPrueba");
+  tieneFechas.entrega = document.getElementById("true");
+  tieneFechas.fiesta = document.getElementById("true");
+
+  var fechas = {};
+  fechas.pruebaMolde = document.getElementById("fechaMolde");
+  fechas.primerPrueba = document.getElementById("fecha1erPrueba");
+  fechas.segundaPrueba = document.getElementById("fecha2daPrueba");
+  fechas.entrega = document.getElementById("fechaEntrega");
+  fechas.fiesta = document.getElementById("fechaFiesta");
+
+  var horas = {};
+  horas.pruebaMolde = document.getElementById("horaPruebaMolde");
+  horas.primerPrueba = document.getElementById("hora1erPrueba");
+  horas.segundaPrueba = document.getElementById("hora2daPrueba");
+  horas.entrega = document.getElementById("horaEntrega");
+  horas.fiesta =  document.getElementById("horaEntrega");
+
+  var titulosEventos = {};
+  titulosEventos.pruebaMolde = "Prueba molde de id cliente ";
+  titulosEventos.primerPrueba = "1er Prueba de id cliente ";
+  titulosEventos.segundaPrueba = "2da Prueba de id cliente ";
+  titulosEventos.entrega = "Entrega de vestido de id cliente ";
+  titulosEventos.fiesta = "Fecha fiesta de id cliente ";
+
+  function iniciar(){
+    google.script.run.withSuccessHandler(todoslosTickets).getAllTickets();
+  }
+
+  function cambiarEstadoFechaMolde(){
+    fechas.pruebaMolde.disabled = !tieneFechas.pruebaMolde.checked;
+    horas.pruebaMolde.disabled = !tieneFechas.pruebaMolde.checked;
+
+    fechas.pruebaMolde.value = "";
+    horas.pruebaMolde.value = "";
+
+    M.updateTextFields();
+  }
+
+  function cambiarEstadoFecha1erPrueba(){
+    fechas.primerPrueba.disabled = !tieneFechas.primerPrueba.checked;
+    horas.primerPrueba.disabled = !tieneFechas.primerPrueba.checked;
+
+    fechas.primerPrueba.value = "";
+    horas.primerPrueba.value = "";
+
+    M.updateTextFields();
+  }
+  function cambiarEstadoFecha2daPrueba(){
+    fechas.segundaPrueba.disabled = !tieneFechas.segundaPrueba.checked;
+    horas.segundaPrueba.disabled = !tieneFechas.segundaPrueba.checked;
+
+    fechas.segundaPrueba.value = "";
+    horas.segundaPrueba.value = "";
+    
+    M.updateTextFields();
+  }
+
+  function guardarCita(){
+    var datos = {};
+
+    //agregar validacion de que fecha entrega debe estar completa
+
+    datos.nombreCliente = document.getElementById("nombreClienteCita").value;
+    datos.email = document.getElementById("emailClienteCita").value;
+
+    var fecha = document.getElementById("fechaCita").value;
+    var hora = document.getElementById("horaCita").value;
+
+    var nombresFechasHoras = {};
+
+    nombresFechasHoras.fechaEvento = fecha;
+    nombresFechasHoras.horaEvento = hora;
+    nombresFechasHoras.nombreEvento = "Cita " +  datos.nombreCliente;
+    
+    datos.evento = nombresFechasHoras;
+
+    google.script.run.crearCita(datos);
+
+    //agregar la fecha y el msj a un evento
+    
+    //google.script.run.enviarMail(email);
+
+    resetCamposCitaNueva();
+  }
+
+  function resetCamposCitaNueva(){
+    
+    document.getElementById("nombreClienteCita").value = "";
+    document.getElementById("emailClienteCita").value = "vestidos15belem@gmail.com";
+
+    document.getElementById("fechaCita").value = "";
+    document.getElementById("horaCita").value = "";
+
+    M.Collapsible.getInstance(document.getElementById("collapsiblePedidos")).close(0);
+
+    M.updateTextFields();
+  }
+
+  function guardarPedido(){
+    var datos = {};
+
+    //agregar validacion de que fecha entrega debe estar completa
+
+    datos.idCliente = document.getElementById("idPedido").value;
+    datos.email = document.getElementById("emailCliente").value;
+
+    datos.senia = document.getElementById("seña").value; 
+    datos.precio = document.getElementById("precio").value;
+
+    var keys = Object.keys(tieneFechas);
+
+    for(var i = 0; i < keys.length ; i++){
+      var nombresFechasHoras = {};
+
+      if(tieneFechas[keys[i]].checked){
+        nombresFechasHoras.fechaEvento = fechas[keys[i]].value;
+        nombresFechasHoras.horaEvento = horas[keys[i]].value;
+        nombresFechasHoras.nombreEvento = titulosEventos[keys[i]] +  datos.idCliente;
+      }
+      datos[keys[i]] = nombresFechasHoras;
+    }
+
+    google.script.run.crearEventos(datos);
+
+    //agregar la fecha y el msj a un evento
+    
+    //google.script.run.enviarMail(email);
+
+    resetCamposPedidoNuevo();
+  }
+
+  function resetCamposPedidoNuevo(){
+    fechas.pruebaMolde.disabled = true;
+    horas.pruebaMolde.disabled = true;
+
+    fechas.pruebaMolde.value = "";
+    horas.pruebaMolde.value = "";
+
+    fechas.primerPrueba.disabled = true;
+    horas.primerPrueba.disabled = true;
+
+    fechas.primerPrueba.value = "";
+    horas.primerPrueba.value = "";
+
+    fechas.segundaPrueba.disabled = true;
+    horas.segundaPrueba.disabled = true;
+
+    fechas.segundaPrueba.value = "";
+    horas.segundaPrueba.value = "";
+
+    fechas.entrega.disabled = true;
+    horas.entrega.disabled = true;
+
+    fechas.entrega.value = "";
+    horas.entrega.value = "";
+
+    fechas.fiesta.value = "";
+
+    M.Collapsible.getInstance(document.getElementById("collapsiblePedidos")).close(1);
+
+    M.updateTextFields();
+  }
+
+  function todoslosTickets(datosTickets){
+    var tableBody = document.getElementById("tableBodyPedidos");
+
+    var table = document.getElementById("tablePedidos");
+   
+    completarDatosTicket(datosTickets, tableBody);
+    for(var i = 1; i < table.rows.length; i++){
+      table.rows[i].addEventListener("click", function(){
+          M.Collapsible.getInstance(document.getElementById("collapsiblePedidos")).close(2);
+          google.script.run.withSuccessHandler(completarModalPedido).datosTicket(this.cells[0].innerHTML);
+      }, false);
+    }
+  }
+
+  function completarDatosTicket(datosTickets, tableBody){
+
+    while(tableBody.hasChildNodes()){
+      tableBody.removeChild(tableBody.firstChild);
+    }
+
+    for(var i = 0; i < datosTickets.length; i++){
+
+      var row = document.createElement("tr");
+
+      for(var j = 0; j < datosTickets[i].length ; j++){
+        var col = document.createElement("td");
+        col.textContent = datosTickets[i][j];
+        row.appendChild(col);
+      }
+      tableBody.appendChild(row);
+    }
+  }
+
+  function completarModalPedido(datos){
+
+    var fechaMoldeModal = M.Datepicker.getInstance(document.getElementById("fechaMoldeModal"));
+    var fechaPrimerPruebaModal = M.Datepicker.getInstance(document.getElementById("fechaPrimerPruebaModal"));
+    var fechaSegundaPruebaModal = M.Datepicker.getInstance(document.getElementById("fechaSegundaPruebaModal"));
+    var fechaEntregaModal = M.Datepicker.getInstance(document.getElementById("fechaEntregaModal"));
+    var fechaFiestaModal = M.Datepicker.getInstance(document.getElementById("fechaFiestaModal"));
+
+    var horaPruebaMoldeModal = document.getElementById("horaPruebaMoldeModal"); 
+    var horaPrimerPruebaModal = document.getElementById("horaPrimerPruebaModal"); 
+    var horaSegundaPruebaModal = document.getElementById("horaSegundaPruebaModal"); 
+    var horaEntregaModal = document.getElementById("horaEntregaModal"); 
+
+    document.getElementById("idClienteModal").value = datos.idCliente;
+    document.getElementById("emailModal").value = datos.emailCliente;
+    document.getElementById("precioModal").value = datos.precio;
+    document.getElementById("restanteModal").value = datos.costoRestante;
+    document.getElementById("estadoModal").value = datos.estado;
+
+    fechaMoldeModal.setDate(datos.pruebaMoldeFecha);
+    horaPruebaMoldeModal.value = datos.pruebaMoldeHora;
+
+    fechaPrimerPruebaModal.setDate(datos.primerPruebaFecha);
+    horaPrimerPruebaModal.value = datos.primerPruebaHora;
+
+    fechaSegundaPruebaModal.setDate(datos.segundaPruebaFecha);
+    horaSegundaPruebaModal.value = datos.segundaPruebaHora;
+
+    fechaEntregaModal.setDate(datos.entregaFecha);
+    horaEntregaModal.value = datos.entregaHora;
+
+    fechaFiestaModal.setDate(datos.fiestaFecha);
+
+    fechaMoldeModal.setInputValue();
+    fechaPrimerPruebaModal.setInputValue();
+    fechaSegundaPruebaModal.setInputValue();
+    fechaEntregaModal.setInputValue();
+    fechaFiestaModal.setInputValue();
+
+    completarDatosTicket(datos.seguimientos, document.getElementById("tableBodySeguimiento"));
+
+    M.updateTextFields();
+
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).open();
+
+  }
+
+  function cambioPruebaMolde(){
+    var id = document.getElementById("idClienteModal").value;
+    var fecha = document.getElementById("fechaMoldeModal").value;
+    var hora = document.getElementById("horaPruebaMoldeModal").value;
+    google.script.run.withSuccessHandler(completarModalPedido).editarPruebaMolde(id, fecha, hora);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+  function cambioPrimerPrueba(){
+    var id = document.getElementById("idClienteModal").value;
+    var fecha = document.getElementById("fechaPrimerPruebaModal").value;
+    var hora = document.getElementById("fechaPrimerPruebaModal").value;
+    google.script.run.withSuccessHandler(completarModalPedido).editarPrimerPrueba(id, fecha, hora);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+function cambioSegundaPrueba(){
+    var id = document.getElementById("idClienteModal").value;
+    var fecha = document.getElementById("fechaSegundaPruebaModal").value;
+    var hora = document.getElementById("horaSegundaPruebaModal").value;
+    google.script.run.withSuccessHandler(completarModalPedido).editarSegundaPrueba(id, fecha, hora);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+function cambioEntrega(){
+    var id = document.getElementById("idClienteModal").value;
+    var fecha = document.getElementById("fechaEntregaModal").value;
+    var hora = document.getElementById("horaEntregaModal").value;
+    google.script.run.withSuccessHandler(completarModalPedido).editarEntrega(id, fecha, hora);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+function cambioFechaFiesta(){
+    var id = document.getElementById("idClienteModal").value;
+    var fecha = document.getElementById("fechaFiestaModal").value;
+    google.script.run.withSuccessHandler(completarModalPedido).editarEntrega(id, fecha);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+  function agregarSeguimiento(){
+    var id = document.getElementById("idClienteModal").value;
+    var seguimiento = document.getElementById("seguimiento").value;
+
+    google.script.run.withSuccessHandler(completarModalPedido).agregarSeguimiento(id, seguimiento);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+  function cambioDatosCliente(){
+    var datos = {};
+
+    var id = document.getElementById("idClienteModal").value;
+    datos.email = document.getElementById("emailModal").value;
+    datos.precio = document.getElementById("precioModal").value;
+    datos.estado = document.getElementById("estadoModal").value;
+
+    datos.cambio = document.getElementById("descripcionCambio").value;
+
+    google.script.run.withSuccessHandler(completarModalPedido).cambiarDatosCliente(id, datos);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+  function agregarPago(){
+    var id = document.getElementById("idClienteModal").value;
+    var pago = document.getElementById("pago").value;
+
+    google.script.run.withSuccessHandler(completarModalPedido).agregarPago(id, pago);
+    M.Modal.getInstance(document.getElementById("modalCambio")).close();
+    M.Modal.getInstance(document.getElementById("modalSeguimiento")).close();
+    resetModal();
+  }
+
+  function resetModal(){
+    var fechaMoldeModal = M.Datepicker.getInstance(document.getElementById("fechaMoldeModal"));
+    var fechaPrimerPruebaModal = M.Datepicker.getInstance(document.getElementById("fechaPrimerPruebaModal"));
+    var fechaSegundaPruebaModal = M.Datepicker.getInstance(document.getElementById("fechaSegundaPruebaModal"));
+    var fechaEntregaModal = M.Datepicker.getInstance(document.getElementById("fechaEntregaModal"));
+    var fechaFiestaModal = M.Datepicker.getInstance(document.getElementById("fechaFiestaModal"));
+
+    var horaPruebaMoldeModal = document.getElementById("horaPruebaMoldeModal"); 
+    var horaPrimerPruebaModal = document.getElementById("horaPrimerPruebaModal"); 
+    var horaSegundaPruebaModal = document.getElementById("horaSegundaPruebaModal"); 
+    var horaEntregaModal = document.getElementById("horaEntregaModal"); 
+
+    document.getElementById("idClienteModal").value = "";
+    document.getElementById("emailModal").value = "";
+    document.getElementById("precioModal").value = "";
+    document.getElementById("restanteModal").value = "";
+    document.getElementById("estadoModal").value = "";
+
+    fechaMoldeModal.setDate("");
+    horaPruebaMoldeModal.value = "";
+
+    fechaPrimerPruebaModal.setDate("");
+    horaPrimerPruebaModal.value = "";
+
+    fechaSegundaPruebaModal.setDate("");
+    horaSegundaPruebaModal.value = "";
+
+    fechaEntregaModal.setDate("");
+    horaEntregaModal.value = "";
+
+    fechaFiestaModal.setDate("");
+
+    fechaMoldeModal.setInputValue();
+    fechaPrimerPruebaModal.setInputValue();
+    fechaSegundaPruebaModal.setInputValue();
+    fechaEntregaModal.setInputValue();
+    fechaFiestaModal.setInputValue();
+
+    document.getElementById("descripcionCambio").value = "";
+    document.getElementById("pago").value = "";
+    document.getElementById("seguimiento").value = "";
+
+
+  }
+
+</script>
